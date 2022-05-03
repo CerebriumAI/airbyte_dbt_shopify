@@ -10,7 +10,7 @@ Let us know which connectors you would like to see next [here](https://19au6qz3a
 This package contains staging models, with the following naming conventions across all packages:
  * Boolean fields are prefixed with `is_` or `has_`
  * Timestamps are appended with `_timestamp`
- * ID primary keys are prefixed with the name of the table. For example, the campaign table's ID column is renamed `campaign_id`.
+ * ID primary keys are prefixed with the name of the table. For example, the customer table's ID column is renamed `customer_id`.
 
 ## DBT Metrics
 
@@ -31,7 +31,7 @@ packages:
 ## Configuration
 
 ### Source Data Location
-By default, this package will look for your gShopify data in the `shopify` schema of your [target database](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile). If this is not where your Shopify data is, please add the following configuration to your `dbt_project.yml` file:
+By default, this package will look for your Shopify data in the `shopify` schema of your [target database](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile). If this is not where your Shopify data is, please add the following configuration to your `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml

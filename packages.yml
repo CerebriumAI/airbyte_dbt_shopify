@@ -1,4 +1,6 @@
 packages:
+  - package: fivetran/fivetran_utils
+    version: [ ">=0.3.0", "<0.4.0" ]
   - package: dbt-labs/dbt_utils
     version: 0.8.4
   - package: dbt-labs/spark_utils

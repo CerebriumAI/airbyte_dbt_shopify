@@ -24,3 +24,5 @@ models:
 vars:
   airbyte_shopify:
     customers: "{{ source('airbyte_shopify','customers') }}"
+    transactions: "{{ source('airbyte_shopify','transactions') }}"
+    orders: "{{ source('airbyte_shopify','orders') }}"
