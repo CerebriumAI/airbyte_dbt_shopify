@@ -1,0 +1,18 @@
+version: 2
+
+sources:
+  - name: airbyte_shopify
+    schema: "{{ var('shopify_schema', 'shopify') }}"
+    database: "{% if target.type != 'spark'%}{{ var('shopify_database', target.database) }}{% endif %}"
+    tables:
+      - name: customers
+
+models:
+  - name: shopify__customers
+    description: "A table storing all customer info"
+    columns:
+      - name: id
+        description: "The unique identifier for the customer"
+        tests:
+          - unique
+          - not_null
