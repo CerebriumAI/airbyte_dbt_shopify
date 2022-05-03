@@ -1,4 +1,4 @@
-name: 'shopify'
+name: 'airbyte_shopify'
 version: '0.1.0'
 require-dbt-version: ['>=1.0.0']
 config-version: 2

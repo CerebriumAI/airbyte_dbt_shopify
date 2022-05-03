@@ -3,3 +3,6 @@ target/
 dbt_packages/
 logs/
 .history/
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/dataSources
