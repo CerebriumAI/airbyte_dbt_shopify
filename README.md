@@ -1,7 +1,7 @@
 [![Apache License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-# Stripe Airbyte
+# Shopify Airbyte
 
-This package models Stripe data from [Airbyte's connector](https://airbyte.com/connectors/stripe).
+This package models Shopify data from [Airbyte's connector](https://airbyte.com/connectors/shopify).
 
 Let us know which connectors you would like to see next [here](https://19au6qz3a6s.typeform.com/to/c284SPEN)
 
@@ -14,7 +14,7 @@ This package contains staging models, with the following naming conventions acro
 
 ## DBT Metrics
 
-This package contains configurations for DBT metrics for you to get up and running quickly with standard Stripe metrics in your existing BI tools.
+This package contains configurations for DBT metrics for you to get up and running quickly with standard Shopify metrics in your existing BI tools.
 
 ## Installation Instructions
 
@@ -24,14 +24,14 @@ Include in your `packages.yml`
 
 ```yaml
 packages:
-  - package: cerebriumAI/dbt-stripe
+  - package: cerebriumAI/dbt-shopify
     version: ["0.1.0"]
 ```
 
 ## Configuration
 
 ### Source Data Location
-By default, this package will look for your gStripe data in the `stripe` schema of your [target database](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile). If this is not where your Stripe data is, please add the following configuration to your `dbt_project.yml` file:
+By default, this package will look for your gShopify data in the `shopify` schema of your [target database](https://docs.getdbt.com/docs/running-a-dbt-project/using-the-command-line-interface/configure-your-profile). If this is not where your Shopify data is, please add the following configuration to your `dbt_project.yml` file:
 
 ```yml
 # dbt_project.yml
@@ -40,8 +40,8 @@ By default, this package will look for your gStripe data in the `stripe` schema 
 config-version: 2
 
 vars:
-    stripe_schema: your_schema_name
-    stripe_database: your_database_name 
+    shopify_schema: your_schema_name
+    shopify_database: your_database_name 
 ```
 
 ## Database Support

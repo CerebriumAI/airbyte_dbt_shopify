@@ -1,4 +1,4 @@
-name: 'stripe'
+name: 'shopify'
 version: '0.1.0'
 require-dbt-version: ['>=1.0.0']
 config-version: 2
@@ -16,11 +16,11 @@ clean-targets:
   - "dbt_packages"
 
 models:
-  airbyte_stripe:
+  airbyte_shopify:
     materialized: table
     intermediate:
       materialized: ephemeral
 
 vars:
-  airbyte_stripe:
-    customers: "{{ source('airbyte_stripe','customers') }}"
+  airbyte_shopify:
+    customers: "{{ source('airbyte_shopify','customers') }}"
