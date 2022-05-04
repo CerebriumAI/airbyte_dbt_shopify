@@ -1,28 +1,34 @@
 with customers as (
 
-    select id as customer_id, * from {{ var('customers') }}
+    select 
+        customer_id,
+    from {{ ref('stg_shopify_customers_tmp') }}
 
-    ), orders as (
+), 
 
-select *
-from {{ ref('shopify__customers__order_aggregates' )}}
+orders as (
 
-    ), joined as (
+    select
+        min(created_at_timestamp) as first_order_timestamp,
+        max(created__at_timestamp) as most_recent_order_timestamp
+    from {{ ref('stg_shopify_orders_tmp' )}}
 
-select
-    customers.*,
-    orders.first_order_timestamp,
-    orders.most_recent_order_timestamp,
-    coalesce(orders.average_order_value, 0) as average_order_value,
-    coalesce(orders.lifetime_total_spent, 0) as lifetime_total_spent,
-    coalesce(orders.lifetime_total_refunded, 0) as lifetime_total_refunded,
-    (coalesce(orders.lifetime_total_spent, 0) - coalesce(orders.lifetime_total_refunded, 0)) as lifetime_total_amount,
-    coalesce(orders.lifetime_count_orders, 0) as lifetime_count_orders
-from customers
-    left join orders
-    using (customer_id)
+), 
 
-    )
+final_customers as (
 
-select *
-from joined
+    select
+        customers.customer_id,
+        customers.first_name,
+        customers.last_name,
+        customers.email,
+        customers.phone,
+        customers.total_spent,
+        customers.orders_count,
+        customers.created_at_timestamp
+    from customers
+    left join orders using (customer_id)
+
+)
+
+select * from final_customers
