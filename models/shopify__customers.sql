@@ -1,6 +1,6 @@
 with customers as (
 
-    select * from {{ var('customers') }}
+    select id as customer_id, * from {{ var('customers') }}
 
     ), orders as (
 
