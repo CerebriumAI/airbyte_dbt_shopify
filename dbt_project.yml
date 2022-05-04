@@ -19,10 +19,15 @@ models:
   airbyte_shopify:
     materialized: table
     intermediate:
-      materialized: ephemeral
+      materialized: view
 
 vars:
   airbyte_shopify:
     customers: "{{ source('airbyte_shopify','customers') }}"
-    transactions: "{{ source('airbyte_shopify','transactions') }}"
+    orders_line_items: "{{ source('airbyte_shopify','orders_line_items') }}"
+    order_refunds_refund_line_items: "{{ source('airbyte_shopify','order_refunds_refund_line_items') }}"
     orders: "{{ source('airbyte_shopify','orders') }}"
+    products_variants: "{{ source('airbyte_shopify','products_variants') }}"
+    products: "{{ source('airbyte_shopify','products') }}"
+    refunds: "{{ source('airbyte_shopify','order_refunds') }}"
+    transactions: "{{ source('airbyte_shopify','transactions') }}"
