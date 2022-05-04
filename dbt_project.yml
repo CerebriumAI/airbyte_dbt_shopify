@@ -18,8 +18,8 @@ clean-targets:
 models:
   airbyte_shopify:
     materialized: table
-    intermediate:
-      materialized: ephemeral
+    tmp:
+      materialized: view
 
 vars:
   airbyte_shopify:
