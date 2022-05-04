@@ -20,7 +20,7 @@ select
     coalesce(orders.lifetime_count_orders, 0) as lifetime_count_orders
 from customers
     left join orders
-    using (customer_id, source_relation)
+    using (customer_id)
 
     )
 
