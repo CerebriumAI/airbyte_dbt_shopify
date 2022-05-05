@@ -22,7 +22,6 @@ models:
       materialized: view
 
 vars:
-  shopify_schema: "airbyte"
   airbyte_shopify:
     customers: "{{ source('airbyte_shopify','customers') }}"
     orders_line_items: "{{ source('airbyte_shopify','orders_line_items') }}"
