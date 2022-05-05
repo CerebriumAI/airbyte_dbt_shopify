@@ -75,6 +75,9 @@ models:
         description: "The unique identifier of the customer who placed the order."
         tests:
           - not_null
+          - relationships:
+              to: ref('shopify__customers')
+              field: customer_id
       - name: created_at_timestamp
         description: "The timestamp of when the order was placed"
         tests:
@@ -155,14 +158,23 @@ models:
         description: "The unique identifier of the order"
         tests:
           - not_null
+          - relationships:
+              to: ref('shopify__orders')
+              field: order_id
       - name: product_id
         description: "The unique identifier of the product ordered"
         tests:
           - not_null
+          - relationships:
+              to: ref('shopify__products')
+              field: product_id
       - name: variant_id
         description: "The unique identifier of the product variant ordered"
         tests:
           - not_null
+          - relationships:
+              to: ref('shopify__products_variants')
+              field: variant_id
       - name: title
         description: "The title of the product ordered"
         tests:
@@ -236,7 +248,7 @@ models:
         description: "The timestamp of when the product was first ordered"
         tests:
           - not_null   
-  - name: products_variants
+  - name: shopify__products_variants
     description: "A table storing information regarding product variants"
     columns:
       - name: variant_id
@@ -248,6 +260,9 @@ models:
         description: "The unique identifier of the product"
         tests:
           - not_null
+          - relationships:
+              to: ref('shopify__products')
+              field: product_id
       - name: title
         description: "The title of the product variant"
         tests:
