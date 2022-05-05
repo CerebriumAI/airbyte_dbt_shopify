@@ -18,37 +18,249 @@ sources:
 
 models:
   - name: shopify__customers
-    description: "A table storing all customer info"
+    description: "A table storing all customer information"
     columns:
       - name: customer_id
         description: "The unique identifier for the customer"
         tests:
           - unique
           - not_null
-
+      - name: first_name
+        description: "The first name of the customer"
+        tests:
+          - not_null
+      - name: last_name
+        description: "The last_name of the customer"
+        tests:
+          - not_null
+      - name: email
+        description: "The email address of the customer"
+        tests:
+          - unique
+          - not_null
+      - name: phone
+        description: "The mobile number of the customer"
+        tests:
+          - unique
+          - not_null
+      - name: total_spent
+        description: "The total amount of money spent by the customer. This is equivalent to LTV."
+        tests:
+          - not_null
+      - name: orders_count
+        description: "The total number of orders placed by the customer"
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        description: "The timestamp of when the customer was created"
+        tests:
+          - not_null
+      - name: first_order_timestamp
+        description: "The timestamp of when the customer first placed an order"
+        tests:
+          - not_null
+      - name: most_recent_order_timestamp
+        description: "The timestamp of when the customer most recently placed an order"
+        tests:
+          - not_null
   - name: shopify__orders
-    description: "A table storing all orders"
+    description: "A table storing all order information"
     columns:
       - name: order_id
         description: "The unique identifier for the order"
         tests:
           - unique
           - not_null
+      - name: customer_id
+        description: "The unique identifier of the customer who placed the order."
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        description: "The timestamp of when the order was placed"
+        tests:
+          - not_null
+      - name: total_line_items_price
+        description: "The total price of all line items in the order"
+        tests:
+          - not_null
+      - name: subtotal_price
+        description: "The subtotal price of the order"
+        tests:
+          - not_null
+      - name: total_discounts
+        description: "The total discounts applied to the order"
+        tests:
+          - not_null
+      - name: total_price
+        description: "The total price of the order"
+        tests:
+          - not_null
+      - name: currency
+        description: "The currency the order was placed in"
+        tests:
+          - not_null
+      - name: referring_site
+        description: "The site the customer came from"
+      - name: processing_method
+        description: "The payment method used to process the order"
+        tests:
+          - not_null
+      - name: landing_site_base_url
+        description: "The base URL of the site the customer came to"
+      - name: fulfillment_status
+        description: "The fulfillment status of the order"
+        tests:
+          - not_null
+      - name: shipping_address_1
+        description: "The first line of the shipping address"
+        tests:
+          - not_null
+      - name: shipping_address_2
+        description: "The second line of the shipping address"
+        tests:
+          - not_null
+      - name: shipping_address_city
+        description: "The city of the shipping address"
+        tests:
+          - not_null
+      - name: shipping_address_company
+        description: "The name of the company on the shipping address"
+      - name: shipping_address_country
+        description: "The country of the shipping address"
+        tests:
+          - not_null
+      - name: shipping_address_province
+        description: "The province of the shipping address"
+      - name: shipping_address_zip
+        description: "The zip code of the shipping address"
+        tests:
+          - not_null
+      - name: shipping_address_latitude
+        description: "The latitude coordinates of the shipping address"
+      - name: shipping_address_longitude
+        description: "The longitude of the shipping address"
+      - name: shipping_title
+        description: "The type of shipping the customer used"
+      - name: shipping_cost
+        description: "The cost of the shipping option the customer selected."
+  - name: shopify__order_line_items
+    description: "A table storing all order line information"
+    columns:
+      - name: order_line_item_id
+        description: "The unique identifier for the order item"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The unique identifier of the order"
+        tests:
+          - not_null
+      - name: product_id
+        description: "The unique identifier of the product ordered"
+        tests:
+          - not_null
+      - name: variant_id
+        description: "The unique identifier of the product variant ordered"
+        tests:
+          - not_null
+      - name: title
+        description: "The title of the product ordered"
+        tests:
+          - not_null
+      - name: variant_title
+        description: "The title of the variant ordered"
+        tests:
+          - not_null
+      - name: sku
+        description: "The sku of the product ordered"
+        tests:
+          - not_null
+      - name: quantity
+        description: "The quantity of the product ordered"
+        tests:
+          - not_null
+      - name: vendor
+        description: "The vendor of the product ordered"
+        tests:
+          - not_null
+      - name: price
+        description: "The price of the product ordered"
+        tests:
+          - not_null
+      - name: total_discount
+        description: "The total discount applied to the product ordered"
+        tests:
+          - not_null
+      - name: currency
+        description: "The currency the order was placed in"
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        description: "The timestamp the order was placed"
+        tests:
+          - not_null
 
   - name: shopify__products
-    description: "A table storing all products"
+    description: "A table storing all product information"
     columns:
       - name: product_id
         description: "The unique identifier for the product"
         tests:
           - unique
           - not_null
-
-  - name: shopify__transactions
-    description: "A table storing all transactions"
+      - name: title
+        description: "The title of the product"
+        tests:
+          - not_null
+      - name: product_type
+        description: "The type of the product"
+        tests:
+          - not_null
+      - name: vendor
+        description: "The vendor of the product"
+        tests:
+          - not_null
+      - name: created_at_timestamp
+        description: "The timestamp the product was created"
+        tests:
+          - not_null
+      - name: quantity_sold
+        description: "The number of units sold of the product"
+        tests:
+          - not_null
+      - name: most_recent_order_timestamp
+        description: "The timestamp of when the product was last ordered"
+        tests:
+          - not_null
+      - name: first_order_timestamp
+        description: "The timestamp of when the product was first ordered"
+        tests:
+          - not_null   
+  - name: products_variants
+    description: "A table storing information regarding product variants"
     columns:
-      - name: transaction_id
-        description: "The unique identifier for the transaction"
+      - name: variant_id
+        description: "The unique identifier of the product variant"
         tests:
           - unique
+          - not_null
+      - name: product_id
+        description: "The unique identifier of the product"
+        tests:
+          - not_null
+      - name: title
+        description: "The title of the product variant"
+        tests:
+          - not_null
+      - name: sku
+        description: "The sku of the product variant"
+        tests:
+          - not_null
+      - name: price
+        description: "The price of the product variant"
+        tests:
+          - not_null
+      - name: inventory_quantity
+        description: "The number of units in inventory of the product variant"
+        tests:
           - not_null
