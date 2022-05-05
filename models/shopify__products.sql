@@ -1,46 +1,35 @@
 with products as (
 
-    select id as product_id, *
-    from {{ var('products') }}
+    select
+        product_id,
+        title,
+        product_type,
+        vendor,
+        created_at_timestamp
+    from {{ ref('stg_shopify_products_tmp') }}
 
-), orders_line_items as (
+), 
 
-    select *
-    from {{ ref('shopify__order_line_items') }}
-
-), orders as (
-
-    select *
-    from {{ ref('shopify__orders')}}
-
-), order_lines_aggregated as (
+orders_line_items as (
 
     select
-        orders_line_items.product_id,
-        sum(orders_line_items.quantity) as quantity_sold,
-        sum(orders_line_items.pre_tax_price) as subtotal_sold,
-
-        min(orders.created_timestamp) as first_order_timestamp,
-        max(orders.created_timestamp) as most_recent_order_timestamp
-    from orders_line_items
-    left join orders
-        using (_airbyte_orders_hashid)
+        product_id,
+        sum(quantity) as quantity_sold,
+        max(created_at_timestamp) as most_recent_order_timestamp,
+        min(created_at_timestamp) as first_order_timestamp
+    from {{ ref('shopify__order_line_items') }}
     group by 1
 
-), joined as (
+),
 
+final_products as (
     select
         products.*,
-        coalesce(order_lines_aggregated.quantity_sold,0) as quantity_sold,
-        coalesce(order_lines_aggregated.subtotal_sold,0) as subtotal_sold,
-
-        order_lines_aggregated.first_order_timestamp,
-        order_lines_aggregated.most_recent_order_timestamp
+        orders_line_items.quantity_sold,
+        orders_line_items.most_recent_order_timestamp,
+        orders_line_items.first_order_timestamp
     from products
-    left join order_lines_aggregated
-        using (product_id)
-
+    left join orders_line_items using (product_id)
 )
 
-select *
-from joined
+select * from final_products

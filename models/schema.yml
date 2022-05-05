@@ -9,6 +9,8 @@ sources:
       - name: orders_line_items
       - name: order_refunds_refund_line_items
       - name: orders
+      - name: orders_shipping_address
+      - name: orders_shipping_lines
       - name: products
       - name: products_variants
       - name: order_refunds

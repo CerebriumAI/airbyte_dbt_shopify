@@ -18,7 +18,7 @@ clean-targets:
 models:
   airbyte_shopify:
     materialized: table
-    intermediate:
+    tmp:
       materialized: view
 
 vars:
@@ -27,6 +27,8 @@ vars:
     orders_line_items: "{{ source('airbyte_shopify','orders_line_items') }}"
     order_refunds_refund_line_items: "{{ source('airbyte_shopify','order_refunds_refund_line_items') }}"
     orders: "{{ source('airbyte_shopify','orders') }}"
+    orders_shipping_address: "{{ source('airbyte_shopify','orders_shipping_address') }}"
+    orders_shipping_lines: "{{ source('airbyte_shopify','orders_shipping_lines') }}"
     products_variants: "{{ source('airbyte_shopify','products_variants') }}"
     products: "{{ source('airbyte_shopify','products') }}"
     refunds: "{{ source('airbyte_shopify','order_refunds') }}"
