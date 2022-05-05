@@ -247,7 +247,7 @@ models:
       - name: first_order_timestamp
         description: "The timestamp of when the product was first ordered"
         tests:
-          - not_null   
+          - not_null
   - name: shopify__products_variants
     description: "A table storing information regarding product variants"
     columns:
@@ -279,3 +279,94 @@ models:
         description: "The number of units in inventory of the product variant"
         tests:
           - not_null
+
+metrics:
+  - name: number_customers
+    label: Number of Customers
+    model: ref('shopify__customers')
+    description: "The number of customers"
+
+    type: count
+    sql: customer_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: number_orders
+    label: Number of Orders
+    model: ref('shopify__orders')
+    description: "The total number of items sold"
+
+    type: count
+    sql: order_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: number_items_sold
+    label: Number of Items Sold
+    model: ref('shopify__order_line_items')
+    description: "The number of items sold"
+
+    type: count
+    sql: order_line_item_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: average_order_value
+    label: Average Order Value
+    model: ref('shopify__orders')
+    description: "The average order value"
+
+    type: average
+    sql: total_price
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: average_order_quantity
+    label: Average Order Quantity
+    model: ref('shopify__orders')
+    description: "The average order quantity"
+
+    type: average
+    sql: # TODO: figure out how to get the average order quantity. Lines has quantity but we need to group by order_id and sum the quantities.
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: top_selling_products
+    label: Top Selling Products
+    model: ref('shopify__order_line_items')
+    description: "The top selling products"
+
+    type: count
+    sql: product_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - price
+      - quantity
