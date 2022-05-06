@@ -249,6 +249,7 @@ models:
         description: "The timestamp of when the product was first ordered"
         tests:
           - not_null
+
   - name: shopify__products_variants
     description: "A table storing information regarding product variants"
     columns:
@@ -280,6 +281,31 @@ models:
         description: "The number of units in inventory of the product variant"
         tests:
           - not_null
+
+  - name: shopify__refunds
+    description: "A table storing information regarding order refunds"
+    columns:
+      - name: refund_id
+        description: "The unique identifier of the refund"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The unique identifier of the order"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('shopify__orders')
+              field: order_id
+      - name: customer_id
+        description: "The unique identifier of the customer"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('shopify__customers')
+              field: customer_id
+      - name: total_price
+        description: "The total price of the original order"
 
 metrics:
   - name: number_of_customers
