@@ -297,15 +297,14 @@ models:
           - relationships:
               to: ref('shopify__orders')
               field: order_id
-      - name: customer_id
-        description: "The unique identifier of the customer"
+      - name: user_id
+        description: "The unique identifier of the user who created the refund"
         tests:
           - not_null
-          - relationships:
-              to: ref('shopify__customers')
-              field: customer_id
       - name: total_price
         description: "The total price of the original order"
+        tests:
+          - not_null
 
 metrics:
   - name: number_of_customers
@@ -364,6 +363,38 @@ metrics:
       - shipping_address_zip
       - total_discounts
       - total_price
+
+  - name: number_of_refunds
+    label: Number of Refunds
+    model: ref('shopify__refunds')
+    description: "The number of refunds"
+
+    type: count_distinct
+    sql: refund_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - user_id
+      - total_price
+
+  # FIXME: This value might be incorrect if refunds can be partial
+  - name: total_refund_value
+    label: Total Refund Value
+    model: ref('shopify__refunds')
+    description: "The value of all refunds"
+
+    type: sum
+    sql: total_price
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - user_id
 
   - name: average_order_value
     label: Average Order Value

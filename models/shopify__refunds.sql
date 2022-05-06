@@ -17,11 +17,6 @@ orders as (
     from {{ ref('stg_shopify_orders') }}
 ),
 
-customers as (
-    select *
-    from {{ ref('stg_shopify_customers') }}
-),
-
 final_refunds as (
 
     select
@@ -33,14 +28,9 @@ final_refunds as (
         refunds.shop_url,
         refunds.created_at_timestamp,
         refunds.processed_at_timestamp,
-        customers.email,
-        customers.first_name,
-        customers.last_name,
         orders.total_price
     from refunds
     left join orders using(order_id)
-    left join customers using(customer_id)
-
 )
 
 
