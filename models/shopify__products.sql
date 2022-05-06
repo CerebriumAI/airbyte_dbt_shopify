@@ -6,9 +6,9 @@ with products as (
         product_type,
         vendor,
         created_at_timestamp
-    from {{ ref('stg_shopify_products_tmp') }}
+    from {{ ref('stg_shopify_products') }}
 
-), 
+),
 
 orders_line_items as (
 

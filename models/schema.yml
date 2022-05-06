@@ -6,6 +6,7 @@ sources:
     database: "{% if target.type != 'spark'%}{{ var('shopify_database', target.database) }}{% endif %}"
     tables:
       - name: customers
+      - name: customers_default_address
       - name: orders_line_items
       - name: order_refunds_refund_line_items
       - name: orders
@@ -281,7 +282,7 @@ models:
           - not_null
 
 metrics:
-  - name: number_customers
+  - name: number_of_customers
     label: Number of Customers
     model: ref('shopify__customers')
     description: "The number of customers"
@@ -293,10 +294,10 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - shipping_address_city
-      - shipping_address_country
+      - city
+      - country
 
-  - name: number_orders
+  - name: number_of_orders
     label: Number of Orders
     model: ref('shopify__orders')
     description: "The number of orders"
@@ -344,36 +345,57 @@ metrics:
       - shipping_address_city
       - shipping_address_country
 
-  - name: average_order_quantity
-    label: Average Order Quantity
+  - name: total_revenue
+    label: Total Revenue
     model: ref('shopify__order_line_items')
-    description: "The average order quantity"
+    description: "The total revenue"
 
-    type: average
-    sql: quantity # FIXME: I don't think this is right. We need the sum of the quantities averaged per order_id.
+    type: sum
+    sql: price
 
     timestamp: created_at_timestamp
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - order_id
       - customer_id
-      - shipping_address_city
-      - shipping_address_country
-
-  - name: top_selling_products
-    label: Top Selling Products
-    model: ref('shopify__order_line_items')
-    description: "The top selling products"
-
-    type: count
-    sql: product_id
-
-    timestamp: created_at_timestamp
-    time_grains: [ day, week, month, year ]
-
-    dimensions:
+      - product_id
+      - name
       - price
       - quantity
       - shipping_address_city
       - shipping_address_country
+
+  - name: total_quantity_sold
+    label: Total Quantity Sold
+    model: ref('shopify__order_line_items')
+    description: "The total quantity sold"
+
+    type: sum
+    sql: quantity
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - product_id
+      - name
+      - price
+      - quantity
+      - shipping_address_city
+      - shipping_address_country
+
+  - name: products_never_ordered
+    label: Products Never Ordered
+    model: ref('shopify__products')
+    description: "The products where the quantity sold is zero"
+
+    type: count
+    sql: quantity_sold
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    filters:
+      - field: quantity_sold
+        operator: '<='
+        value: '0'
