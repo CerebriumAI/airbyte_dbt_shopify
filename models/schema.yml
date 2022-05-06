@@ -297,6 +297,26 @@ metrics:
       - city
       - country
 
+  - name: number_of_repeat_customers
+    label: Number of Repeat Customers
+    model: ref('shopify__customers')
+    description: "The number of repeat customers"
+
+    type: count_distinct
+    sql: customer_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - city
+      - country
+      - email
+      - first_name
+      - last_name
+      - orders_count
+      - total_spent
+
   - name: number_of_orders
     label: Number of Orders
     model: ref('shopify__orders')
@@ -309,25 +329,15 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
+      - currency
       - customer_id
+      - fulfillment_status
       - shipping_address_city
       - shipping_address_country
-
-  - name: number_items_sold
-    label: Number of Items Sold
-    model: ref('shopify__order_line_items')
-    description: "The number of items sold"
-
-    type: count_distinct
-    sql: order_line_item_id
-
-    timestamp: created_at_timestamp
-    time_grains: [ day, week, month, year ]
-
-    dimensions:
-      - order_id
-      - shipping_address_city
-      - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+      - total_discounts
+      - total_price
 
   - name: average_order_value
     label: Average Order Value
@@ -341,9 +351,15 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
+      - currency
       - customer_id
+      - fulfillment_status
       - shipping_address_city
       - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+      - total_discounts
+      - total_price
 
   - name: total_revenue
     label: Total Revenue
@@ -357,13 +373,15 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
+      - quantity
+      - order_id
       - customer_id
-      - product_id
-      - name
       - price
       - quantity
-      - shipping_address_city
-      - shipping_address_country
+      - sku
+      - title
+      - total_discount
+      - vendor
 
   - name: total_quantity_sold
     label: Total Quantity Sold
@@ -377,12 +395,15 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - product_id
-      - name
+      - price
+      - order_id
+      - customer_id
       - price
       - quantity
-      - shipping_address_city
-      - shipping_address_country
+      - sku
+      - title
+      - total_discount
+      - vendor
 
   - name: products_never_ordered
     label: Products Never Ordered

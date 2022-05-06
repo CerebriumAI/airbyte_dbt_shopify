@@ -28,6 +28,7 @@ orders as (
 final_order_items as (
     select
         orders_line_items.order_line_item_id,
+        orders.customer_id,
         orders.order_id,
         orders_line_items.product_id,
         orders_line_items.variant_id,
