@@ -321,31 +321,7 @@ metrics:
     dimensions:
       - city
       - country
-
-  - name: number_of_repeat_customers
-    label: Number of Repeat Customers
-    model: ref('shopify__customers')
-    description: "The number of repeat customers"
-
-    type: count_distinct
-    sql: customer_id
-
-    timestamp: created_at_timestamp
-    time_grains: [ day, week, month, year ]
-
-    dimensions:
-      - city
-      - country
-      - email
-      - first_name
-      - last_name
       - orders_count
-      - total_spent
-
-    filters:
-      - field: orders_count
-        operator: '>'
-        value: '1'
 
   - name: number_of_orders
     label: Number of Orders
@@ -360,14 +336,11 @@ metrics:
 
     dimensions:
       - currency
-      - customer_id
       - fulfillment_status
       - shipping_address_city
       - shipping_address_country
       - shipping_address_province
       - shipping_address_zip
-      - total_discounts
-      - total_price
 
   - name: number_of_refunds
     label: Number of Refunds
@@ -383,7 +356,6 @@ metrics:
     dimensions:
       - currency
       - user_id
-      - total_price
 
   # FIXME: This value might be incorrect if refunds can be partial
   - name: total_refund_value
@@ -420,8 +392,6 @@ metrics:
       - shipping_address_country
       - shipping_address_province
       - shipping_address_zip
-      - total_discounts
-      - total_price
 
   - name: total_revenue
     label: Total Revenue
@@ -442,8 +412,6 @@ metrics:
       - shipping_address_country
       - shipping_address_province
       - shipping_address_zip
-      - total_discounts
-      - total_price
 
   - name: total_quantity_sold
     label: Total Quantity Sold
@@ -457,31 +425,10 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - price
-      - order_id
       - customer_id
-      - price
-      - quantity
       - sku
       - title
-      - total_discount
       - vendor
-
-  - name: products_never_ordered
-    label: Products Never Ordered
-    model: ref('shopify__products')
-    description: "The products where the quantity sold is zero"
-
-    type: count
-    sql: quantity_sold
-
-    timestamp: created_at_timestamp
-    time_grains: [ day, week, month, year ]
-
-    filters:
-      - field: quantity_sold
-        operator: '<='
-        value: '0'
 
   - name: products_by_quantity_sold
     label: Products by Quantity Sold
@@ -495,12 +442,10 @@ metrics:
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - created_at_timestamp
       - first_order_timestamp
       - most_recent_order_timestamp
       - product_id
       - product_type
-      - quantity_sold
       - title
       - vendor
 
