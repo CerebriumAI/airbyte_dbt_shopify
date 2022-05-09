@@ -342,6 +342,11 @@ metrics:
       - orders_count
       - total_spent
 
+    filters:
+      - field: orders_count
+        operator: '>='
+        value: '1'
+
   - name: number_of_orders
     label: Number of Orders
     model: ref('shopify__orders')
