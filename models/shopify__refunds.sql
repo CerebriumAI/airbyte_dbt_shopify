@@ -7,14 +7,18 @@ with refunds as (
         order_id,
         shop_url,
         created_at_timestamp,
-        processed_at_timestamp
+        processed_at_timestamp,
+        _airbyte_order_refunds_hashid
 
-    from {{ ref('stg_shopify_refunds') }}
+    from {{ ref('stg_shopify_order_refunds') }}
 ),
 
-orders as (
-    select *
-    from {{ ref('stg_shopify_orders') }}
+order_refunds_refund_line_items as (
+    select
+        _airbyte_order_refunds_hashid,
+        sum(subtotal) as total_refund_amount
+    from {{ ref('stg_shopify_order_refunds_refund_line_items') }}
+    group by _airbyte_order_refunds_hashid
 ),
 
 final_refunds as (
@@ -28,9 +32,9 @@ final_refunds as (
         refunds.shop_url,
         refunds.created_at_timestamp,
         refunds.processed_at_timestamp,
-        orders.total_price
+        order_refunds_refund_line_items.total_refund_amount
     from refunds
-    left join orders using(order_id)
+    left join order_refunds_refund_line_items using(_airbyte_order_refunds_hashid)
 )
 
 

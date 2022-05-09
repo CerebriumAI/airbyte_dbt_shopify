@@ -301,8 +301,8 @@ models:
         description: "The unique identifier of the user who created the refund"
         tests:
           - not_null
-      - name: total_price
-        description: "The total price of the original order"
+      - name: total_refund_amount
+        description: "The total amount being refunded"
         tests:
           - not_null
 
@@ -357,14 +357,13 @@ metrics:
       - currency
       - user_id
 
-  # FIXME: This value might be incorrect if refunds can be partial
   - name: total_refund_value
     label: Total Refund Value
     model: ref('shopify__refunds')
-    description: "The value of all refunds"
+    description: "The total refund amount"
 
     type: sum
-    sql: total_price
+    sql: total_refund_amount
 
     timestamp: created_at_timestamp
     time_grains: [ day, week, month, year ]

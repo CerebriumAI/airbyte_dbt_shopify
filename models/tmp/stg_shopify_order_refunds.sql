@@ -3,4 +3,4 @@ select
     created_at as created_at_timestamp,
     processed_at as processed_at_timestamp,
     *
-from {{ var('refunds') }}
+from {{ var('order_refunds') }}
