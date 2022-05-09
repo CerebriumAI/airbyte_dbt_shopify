@@ -344,7 +344,7 @@ metrics:
 
     filters:
       - field: orders_count
-        operator: '>='
+        operator: '>'
         value: '1'
 
   - name: number_of_orders
@@ -425,25 +425,25 @@ metrics:
 
   - name: total_revenue
     label: Total Revenue
-    model: ref('shopify__order_line_items')
+    model: ref('shopify__orders')
     description: "The total revenue"
 
     type: sum
-    sql: price
+    sql: total_price
 
     timestamp: created_at_timestamp
     time_grains: [ day, week, month, year ]
 
     dimensions:
-      - quantity
-      - order_id
+      - currency
       - customer_id
-      - price
-      - quantity
-      - sku
-      - title
-      - total_discount
-      - vendor
+      - fulfillment_status
+      - shipping_address_city
+      - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+      - total_discounts
+      - total_price
 
   - name: total_quantity_sold
     label: Total Quantity Sold
