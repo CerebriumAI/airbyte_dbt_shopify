@@ -482,3 +482,25 @@ metrics:
       - field: quantity_sold
         operator: '<='
         value: '0'
+
+  - name: products_by_quantity_sold
+    label: Products by Quantity Sold
+    model: ref('shopify__products')
+    description: "Products by quantity sold"
+
+    type: sum
+    sql: quantity_sold
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - created_at_timestamp
+      - first_order_timestamp
+      - most_recent_order_timestamp
+      - product_id
+      - product_type
+      - quantity_sold
+      - title
+      - vendor
+
