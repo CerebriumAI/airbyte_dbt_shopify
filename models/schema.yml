@@ -6,6 +6,7 @@ sources:
     database: "{% if target.type != 'spark'%}{{ var('shopify_database', target.database) }}{% endif %}"
     tables:
       - name: customers
+      - name: customers_default_address
       - name: orders_line_items
       - name: order_refunds_refund_line_items
       - name: orders
@@ -247,7 +248,8 @@ models:
       - name: first_order_timestamp
         description: "The timestamp of when the product was first ordered"
         tests:
-          - not_null   
+          - not_null
+
   - name: shopify__products_variants
     description: "A table storing information regarding product variants"
     columns:
@@ -279,3 +281,170 @@ models:
         description: "The number of units in inventory of the product variant"
         tests:
           - not_null
+
+  - name: shopify__refunds
+    description: "A table storing information regarding order refunds"
+    columns:
+      - name: refund_id
+        description: "The unique identifier of the refund"
+        tests:
+          - unique
+          - not_null
+      - name: order_id
+        description: "The unique identifier of the order"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('shopify__orders')
+              field: order_id
+      - name: user_id
+        description: "The unique identifier of the user who created the refund"
+        tests:
+          - not_null
+      - name: total_refund_amount
+        description: "The total amount being refunded"
+        tests:
+          - not_null
+
+metrics:
+  - name: number_of_customers
+    label: Number of Customers
+    model: ref('shopify__customers')
+    description: "The number of customers"
+
+    type: count_distinct
+    sql: customer_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - city
+      - country
+      - orders_count
+
+  - name: number_of_orders
+    label: Number of Orders
+    model: ref('shopify__orders')
+    description: "The number of orders"
+
+    type: count_distinct
+    sql: order_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - fulfillment_status
+      - shipping_address_city
+      - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+
+  - name: number_of_refunds
+    label: Number of Refunds
+    model: ref('shopify__refunds')
+    description: "The number of refunds"
+
+    type: count_distinct
+    sql: refund_id
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - user_id
+
+  - name: total_refund_value
+    label: Total Refund Value
+    model: ref('shopify__refunds')
+    description: "The total refund amount"
+
+    type: sum
+    sql: total_refund_amount
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - user_id
+
+  - name: average_order_value
+    label: Average Order Value
+    model: ref('shopify__orders')
+    description: "The average order value"
+
+    type: average
+    sql: total_price
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - customer_id
+      - fulfillment_status
+      - shipping_address_city
+      - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+
+  - name: total_revenue
+    label: Total Revenue
+    model: ref('shopify__orders')
+    description: "The total revenue"
+
+    type: sum
+    sql: total_price
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - currency
+      - customer_id
+      - fulfillment_status
+      - shipping_address_city
+      - shipping_address_country
+      - shipping_address_province
+      - shipping_address_zip
+
+  - name: total_quantity_sold
+    label: Total Quantity Sold
+    model: ref('shopify__order_line_items')
+    description: "The total quantity sold"
+
+    type: sum
+    sql: quantity
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - customer_id
+      - sku
+      - title
+      - vendor
+
+  - name: products_by_quantity_sold
+    label: Products by Quantity Sold
+    model: ref('shopify__products')
+    description: "Products by quantity sold"
+
+    type: sum
+    sql: quantity_sold
+
+    timestamp: created_at_timestamp
+    time_grains: [ day, week, month, year ]
+
+    dimensions:
+      - first_order_timestamp
+      - most_recent_order_timestamp
+      - product_id
+      - product_type
+      - title
+      - vendor
+

@@ -13,18 +13,18 @@ with orders as (
         landing_site_base_url,
         fulfillment_status,
         _airbyte_orders_hashid
-        
-    from {{ ref('stg_shopify_orders_tmp') }}
+
+    from {{ ref('stg_shopify_orders') }}
 ),
 
 orders_shipping_address as (
     select *
-    from {{ ref('stg_shopify_orders_shipping_address_tmp') }}
-), 
+    from {{ ref('stg_shopify_orders_shipping_address') }}
+),
 
 orders_shipping_lines as (
     select *
-    from {{ ref('stg_shopify_orders_shipping_lines_tmp') }}
+    from {{ ref('stg_shopify_orders_shipping_lines') }}
 ),
 
 final_orders as (

@@ -7,16 +7,16 @@ with product_variants as (
         price,
         inventory_quantity,
         _airbyte_products_hashid
-    from {{ ref('stg_shopify_products_variants_tmp') }}
+    from {{ ref('stg_shopify_products_variants') }}
 
-), 
+),
 
 products as (
 
     select *
-    from {{ ref('stg_shopify_products_tmp') }}
+    from {{ ref('stg_shopify_products') }}
 
-), 
+),
 
 product_variants_final as (
 

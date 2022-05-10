@@ -11,22 +11,24 @@ with orders_line_items as (
         price,
         total_discount,
         _airbyte_orders_hashid
-    from {{ ref('stg_shopify_orders_line_items_tmp') }}
+    from {{ ref('stg_shopify_orders_line_items') }}
 
 ),
 
 orders as (
     select
         order_id,
+        customer_id,
         currency,
         created_at_timestamp,
         _airbyte_orders_hashid
-    from {{ ref('stg_shopify_orders_tmp') }}
+    from {{ ref('stg_shopify_orders') }}
 ),
 
 final_order_items as (
     select
         orders_line_items.order_line_item_id,
+        orders.customer_id,
         orders.order_id,
         orders_line_items.product_id,
         orders_line_items.variant_id,
@@ -42,5 +44,5 @@ final_order_items as (
     from orders_line_items
     left join orders using (_airbyte_orders_hashid)
 )
- 
+
 select *from final_order_items

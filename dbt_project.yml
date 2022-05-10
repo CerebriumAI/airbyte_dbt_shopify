@@ -24,12 +24,13 @@ models:
 vars:
   airbyte_shopify:
     customers: "{{ source('airbyte_shopify','customers') }}"
-    orders_line_items: "{{ source('airbyte_shopify','orders_line_items') }}"
+    customers_default_address: "{{ source('airbyte_shopify','customers_default_address') }}"
+    order_refunds: "{{ source('airbyte_shopify','order_refunds') }}"
     order_refunds_refund_line_items: "{{ source('airbyte_shopify','order_refunds_refund_line_items') }}"
     orders: "{{ source('airbyte_shopify','orders') }}"
+    orders_line_items: "{{ source('airbyte_shopify','orders_line_items') }}"
     orders_shipping_address: "{{ source('airbyte_shopify','orders_shipping_address') }}"
     orders_shipping_lines: "{{ source('airbyte_shopify','orders_shipping_lines') }}"
-    products_variants: "{{ source('airbyte_shopify','products_variants') }}"
     products: "{{ source('airbyte_shopify','products') }}"
-    refunds: "{{ source('airbyte_shopify','order_refunds') }}"
+    products_variants: "{{ source('airbyte_shopify','products_variants') }}"
     transactions: "{{ source('airbyte_shopify','transactions') }}"
